@@ -1,0 +1,103 @@
+body {
+    background: ;
+}
+
+aside {
+    float: left;
+    background: white;
+    width: 20%;
+    padding: 2.5%;
+    height: 100vh;
+    border-right: 5px solid #4d4d4d;
+}
+
+aside h3{
+    margin-top: 20px;
+    font-size: 28px;
+}
+
+aside img{padding: 0%}
+
+aside ul { padding: 0%;}
+
+aside ul li{
+    color: black;
+    display: block;
+    margin-top: 15px;
+    transition: transform .5s ease;
+}
+
+aside ul li:hover, aside ul a:hover {
+    color: black;
+    text-decoration: none;
+    transform: scale(1.05);
+}
+
+main .features {
+    float:left;
+    color: black;
+    margin: 20px 10px 10px 30px;
+    text-align: left;
+    width: 75%;
+}
+main .dodo{
+    float:left;
+    color: black;
+    margin: 20px 10px 10px 30px;
+    text-align: left;
+    width: 75%;
+}
+
+main .dodo form{
+    float:left;
+    color: black;
+    margin: 20px 10px 10px 30px;
+    text-align: left;
+    width: 75%;
+}
+
+main .dada{
+    float:left;
+    color: black;
+    margin: 10px 10px 10px 10px;
+    text-align: left;
+    width: 75%;
+}
+
+main .dada form{
+    float:left;
+    color: black;
+    margin: 20px 20px 20px 20px;
+    text-align: left;
+    width: 75%;
+}
+
+main .features h1{font-size: 50px; margin-bottom: 20px;}
+main .features p{max-width: 50%; margin: 0px ;}
+
+client .features .table{
+    float: left;
+    width: 70%;
+}
+
+
+form {width:60%}
+
+
+
+.btn-info{
+float: right;
+margin-top:20px;
+width: 200px;
+}
+
+.btn-primary{
+margin-top:20px;
+}
+
+main .features #footer {
+    position: fixed; /* Фиксированное положение */
+    right:0px; bottom: 0; /* Левый нижний угол */
+    padding: 10px; /* Поля вокруг текста */
+
+}

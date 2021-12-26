@@ -1,0 +1,56 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>  {% block title %} {% endblock %}</title>
+    <link rel="stylesheet"  href = "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'main/css/main.css' %}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <link rel="shortcut icon" type="image/png" href="{% static 'main/img/favicon.ico' %}">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+
+</head>
+<body>
+    <aside>
+         <img src="{% static 'main/img/logo.png' %}" width="100%"   alt="logo">
+        <h3>Навигация</h3>
+        <ul>
+           <a href="{% url 'home' %}" ><li><i class="fas fa-home"></i></i> Главная</li></a>
+            {% if user.is_authenticated %}
+           <a href="{% url 'products' %}"><li><i class="fas fa-store"></i> Товары</li></a>
+           <a href="{% url 'providers' %}" ><li><i class="fas fa-people-carry"></i> Поставщики</li></a>
+            <a href="{% url 'clients' %}"><li><i class="fas fa-handshake"></i> Клиенты</li></a>
+            {% for group in request.user.groups.all %}
+            {% if group.name == 'Заведующий складом' or group.name == 'Администратор сайта' %}
+              <a href="{% url 'documents' %}"><li><i class="fas fa-edit"></i></i> Сформировать документы</li></a>
+            {% else %}
+              <a href="{% url 'documents' %}"><li><i class="fas fa-edit"></i></i> Посмотреть документы</li></a>
+                {% endif %}
+            {% endfor %}
+           <a href="{% url 'my-view' %}"><li><i class="fas fa-file-alt"></i> Бланки заказов</li></a>
+            <a href="{% url 'logout' %}"><li><i class="fas fa-door-open"></i></i> Выход</li></a>
+            {% else %}
+            <a href="{% url 'login' %}"><li><i class="fas fa-sign-in-alt"></i> Войти</li></a>
+            {% endif %}
+            {% if user.is_superuser %}
+            <hr>
+            <a href="{% url 'admin:index' %}"><li><i class="fas fa-crown"></i> Панель администратора</li></a>
+            {% endif %}
+            <form method="POST">
+            {% csrf_token %}>
+                <input type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" class="form-control" id="act_num" name="datemask" value="{{datemask}}">
+<!--            {{maskform.datemask}}-->
+            <button type="submit"></button></form>
+        </ul>
+    </aside>
+    <main>
+       {% block content %}
+    {% endblock %}
+    </main>
+</body>
+</html>

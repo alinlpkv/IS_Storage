@@ -1,0 +1,86 @@
+{% extends 'main/layout.html' %}
+{% block title %} Акты приема-передачи {% endblock %}
+{% block content %}
+    <div class="features">
+        <h1>Акты</h1>
+        {% for group in request.user.groups.all %}
+            {% if group.name == 'Заведующий складом' or group.name == 'Администратор сайта' %}
+        <div style="width: 60%;">
+        <form action="{% url 'open_act' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+                      <div class="row">
+                            <div class="col-sm">
+                                <div class="form-group">
+                                    <label>ФИО клиента</label>
+                                         {{ form.client }}
+                                </div>
+                            </div>
+                      </div>
+
+            <div class="row">
+                      <div class="col-sm">
+                            <div class="form-group">
+                                <label>Дата создания документа</label>
+                                 {{ form.date }}
+                            </div>
+                      </div>
+                <div class="col-sm">
+                            <div class="form-group">
+                                <label>Номер акта</label>
+                                 {{ form.numact }}
+                            </div>
+                      </div>
+
+                  </div>
+             <div class="row">
+                <div class="col-sm">
+                            <div class="form-group">
+                                <label>{{ form.docfile.help_text }}</label>
+                                 {{ form.non_field_errors }}
+                                    {{ form.docfile }}
+                                  {{ form.docfile.errors }}
+                            </div>
+                      </div>
+             </div>
+<!--           <p>{{ message }}</p>-->
+            <p><input type="submit" value="Загрузить"/></p>
+
+        </form>
+        </div>
+
+        <hr>
+ {% endif %}
+            {% endfor %}
+         <div>
+            <form action="{% url 'open_act' %}" method="GET" class="form-inline my-2 my-lg-0">
+           {% csrf_token %}
+          <input type="search" class="form-control mr-sm-2" placeholder="Поиск по дате" name="search" style="width: 400px;">
+          <button type="Submit" class="btn btn-info my-2 my-sm-0" name = "Submit" value="Submit" >Искать</button>
+            </form>
+         </div>
+        <div style="margin-top:10px; width: 80%">
+        {% if documents %}
+            <ul class="list-group">
+                {% for document in documents %}
+                <div class="list-group" style="margin-top:10px;">
+                    <a href="{{ document.docfile.url }}" class="list-group-item list-group-item-action ">
+
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1"> {{ document.docfile.name }} </h5>
+                                <small>{{document.date}}</small>
+                        </div>
+
+                <p class="mb-1"> {{document.client}} </p>
+  </a>
+                </div>
+                {% endfor %}
+            </ul>
+        {% else %}
+              <div class="alert alert-primary" role="alert" style="width:50%;">
+                Документы не найдены. Пожалуйста, загрузите документы.
+            </div>
+        {% endif %}
+        </div>
+    </div>
+{% endblock %}

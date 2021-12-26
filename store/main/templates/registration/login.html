@@ -1,0 +1,12 @@
+{% extends 'main/layout.html' %}
+
+{% block content %}
+<div class="div features">
+<h1 style=" margin-left: 0px;"> Вход в систему </h1>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="btn btn-primary" >Войти</button>
+</form>
+</div>
+{% endblock %}

@@ -1,0 +1,111 @@
+{% extends 'main/layout.html' %}
+{% block title %} Акт приема-передачи {% endblock %}
+{% block content %}
+    <div class="dodo">
+    <h1>Заполнение акта приема-передачи</h1>
+        {% if docname != '' and error_prod == '' %}
+         <div class="alert alert-primary" role="alert" style="width: 60%;">
+         Документ создан!
+            <a href="{% url 'open_act' %}" class="alert-link"> Открыть форму для загрузки документа.</a>
+        </div>
+        {% endif %}
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                         <div class="form-group">
+                            <label>Номер акта</label>
+                             <input type="text" class="form-control" id="act_num" name="actnum" value="{{actnum}}" disabled>
+<!--                           {{ form.act_num }}-->
+                         </div>
+                    </div>
+                    <div class="col">
+                         <div class="form-group">
+                                <label >Клиентская компания</label>
+                                 {{ myform.client }}
+                         </div>
+                    </div>
+                    <div class="col">
+                       <div class="form-group">
+                            <label>Номер договора</label>
+<!--                            <input type="text" class="form-control" id="contract_num" placeholder="****" name="contract_num" required>-->
+                           {{ form.contract_num }}
+                       </div>
+                    </div>
+            </div>
+        </div>
+
+             <div class="container">
+                <div class="row">
+                    <div class="col">
+                         <div class="form-group">
+                            <label>Дата составления</label>
+                             {{ form.act_date }}
+                         </div>
+                    </div>
+                    <div class="col">
+                         <div class="form-group">
+                             <label>Должность клиента</label>
+                             {{ form.post }}
+                         </div>
+                    </div>
+                    <div class="col">
+                       <div class="form-group">
+                             <label>Дата составления договора</label>
+                            {{ form.contract_date }}
+                       </div>
+                    </div>
+            </div>
+        </div>
+             <div class="container">
+                <div class="row">
+                    <div class="col">
+                         <div class="form-group">
+                           <label>Название документа</label>
+                             {{ form.doc_name }}
+                         </div>
+                    </div>
+                    <div class="col">
+                         <div class="form-group">
+                             <label>ФИО клиента</label>
+                             {{ form.name }}
+                         </div>
+                    </div>
+            </div>
+        </div>
+            {{error}}
+        <hr>
+             <div class="container">
+                 <div class="row">
+                      <div class="col-sm">
+                          <label>Товар</label>
+                      </div>
+                            <div class="col-sm">
+                                    <label>Количество</label>
+                            </div>
+                 </div>
+                 {% for f in forms %}
+                  <div class="row">
+                      <div class="col-sm">
+                            <div class="form-group">
+                                  {{ f.product }}
+                                {{f.non_field_errors}}
+                            </div>
+                      </div>
+                            <div class="col-sm">
+                                <div class="form-group">
+                                         {{ f.amount }}
+
+                                        {{ error_prod }}
+
+                                </div>
+                            </div>
+                 </div>
+                 {% endfor %}
+            </div>
+        <button type="submit" class="btn btn-info" name = "submit">Применить</button>
+     </form>
+
+ </div>
+{% endblock %}

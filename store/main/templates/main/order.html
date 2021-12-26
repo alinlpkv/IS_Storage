@@ -1,0 +1,35 @@
+{% extends 'main/layout.html' %}
+{% block title %} Новый клиент{% endblock %}
+{% block content %}
+<div class="dodo">
+    <h1>Заполнение акта приема-передачи</h1>
+        <form action="thanks" method="POST">
+            {% csrf_token %}
+             <div class="container">
+                 <div class="row">
+                      <div class="col-sm">
+                          <label>Товар</label>
+                      </div>
+                            <div class="col-sm">
+                                    <label>Количество</label>
+                            </div>
+
+                 </div>
+                 {% for f in forms %}
+                  <div class="row">
+                      <div class="col-sm">
+                            <div class="form-group">
+                                  {{ f.product }}
+                            </div>
+                      </div>
+                            <div class="col-sm">
+                                <div class="form-group">
+                                         <input type="text" class="form-control" id="amount" placeholder="Количество" required name="amount">
+                                </div>
+                            </div>
+                 </div>
+                 {% endfor %}
+            </div>
+        <a href="{% url 'thanks' %}"><button type="submit" class="btn btn-info" name = "submit">Применить</button></a>
+     </form>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'main/layout.html' %}
+{% block title %} Описи {% endblock %}
+{% block content %}
+    <div class="features">
+        <h1>Описи</h1>
+        <div>
+            <form action="{% url 'open_opis' %}" method="GET" class="form-inline my-2 my-lg-0">
+           {% csrf_token %}
+          <input type="search" class="form-control mr-sm-2" placeholder="Поиск по дате" name="search" >
+          <button type="Submit" class="btn btn-info my-2 my-sm-0" name = "Submit" value="Submit" style="">Искать</button>
+      </form>
+    </div>
+        <div style="margin-top: 20px;">
+        {% if documents %}
+            <ul class="list-group" style="width:50%;">
+                {% for document in documents %}
+                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                     <a href="{{ document.docfile.url }}">{{ document.docfile.name }}</a>
+                    <span class="badge badge-outline-primary badge-pill"> {{document.date}} </span></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Документы не найдены.</p>
+        {% endif %}
+</div>
+        <!-- Upload form. Note enctype attribute! -->
+<!--        <form action="{% url 'my-view' %}" method="post" enctype="multipart/form-data">-->
+<!--            {% csrf_token %}-->
+<!--            {{ message }}-->
+<!--            <p>{{ form.non_field_errors }}</p>-->
+
+<!--            <p>{{ form.docfile.label_tag }} {{ form.docfile.help_text }}</p>-->
+
+<!--            <p>-->
+<!--                {{ form.docfile.errors }}-->
+<!--                {{ form.docfile }}-->
+<!--            </p>-->
+<!--            <br>-->
+<!--            <p><input type="submit" value="Загрузить"/></p>-->
+<!--        </form>-->
+
+    </div>
+{% endblock %}

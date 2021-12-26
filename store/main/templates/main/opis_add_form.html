@@ -1,0 +1,139 @@
+{% extends 'main/layout.html' %}
+{% block title %} {{title }} {% endblock %}
+{% block content %}
+    <div class="dada">
+    <h1>Заполнение инвентаризационной описи</h1>
+        {% if doc_name != '' %}
+         <div class="alert alert-primary" role="alert" style="width: 60%;">
+         Документ создан!
+            <a href="{% url 'open_opis' %}" class="alert-link"> Открыть форму для загрузки документа.</a>
+        </div>
+        {% endif %}
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                         <div class="form-group">
+                                <label>Номер документа</label>
+                                <input type="text" class="form-control" id="num_doc" placeholder="Введите номер акта" name="num_doc" value="{{num_doc}}" disabled>
+                         </div>
+                    </div>
+                    <div class="col">
+                         <div class="form-group">
+                                <label >Вид деятельности</label>
+                            {{ form.v_activ}}
+                         </div>
+                    </div>
+                    <div class="col">
+                       <div class="form-group">
+                            <label>Дата начала инвентаризации</label>
+                                {{form.d_start}}
+                       </div>
+                    </div>
+            </div>
+
+
+        </div>
+
+             <div class="container">
+                <div class="row">
+                    <div class="col">
+                         <div class="form-group">
+                                 <label>Код ОКУД</label>
+                                {{form.okud}}
+                         </div>
+                    </div>
+                    <div class="col">
+                         <div class="form-group">
+                             <label>Номер</label>
+                                {{form.num}}
+                         </div>
+                    </div>
+                    <div class="col">
+                       <div class="form-group">
+                             <label>Дата окончания инвентаризации</label>
+                                    {{form.d_end}}
+                       </div>
+                    </div>
+            </div>
+        </div>
+
+
+         <div class="container">
+            <div class="row">
+                    <div class="col">
+                         <div class="form-group">
+                                <label>Код ОКПО</label>
+                               {{form.okpo}}
+                         </div>
+                    </div>
+                    <div class="col">
+                         <div class="form-group">
+                                <label>Дата</label>
+                                    {{form.date}}
+                         </div>
+                    </div>
+                    <div class="col">
+                       <div class="form-group">
+                            <label>Вид операции</label>
+                                {{form.v_oper}}
+                       </div>
+                    </div>
+            </div>
+         </div>
+
+            <div class="container">
+            <div class="row">
+                    <div class="col">
+                         <div class="form-group">
+                             <label>Структурное подразделение</label>
+                              {{form.podrazdel}}
+                         </div>
+                    </div>
+<!--                    <div class="col">-->
+<!--                         <div class="form-group">-->
+<!--                                <label></label>-->
+
+<!--                         </div>-->
+<!--                    </div>-->
+                    <div class="col">
+                       <div class="form-group">
+                            <label>Вид товарно-материальных ценностей</label>
+                            {{form.v_product}}
+                       </div>
+                    </div>
+            </div>
+            </div>
+
+            <hr>
+            <p><b>Введите фактические значения</b></p>
+             <div class="container">
+                 <div class="row">
+                      <div class="col-sm">
+                          <label>Товар</label>
+                      </div>
+                            <div class="col-sm">
+                                    <label>Количество</label>
+                            </div>
+                 </div>
+                 {% for f in forms %}
+                  <div class="row">
+                      <div class="col-sm">
+                            <div class="form-group">
+                                  {{ f.product }}
+                                {{f.non_field_errors}}
+                            </div>
+                      </div>
+                            <div class="col-sm">
+                                <div class="form-group">
+                                         {{ f.amount }}
+                                </div>
+                            </div>
+                 </div>
+                 {% endfor %}
+            </div>
+        <button type="submit" class="btn btn-info" name = "submit">Применить</button>
+     </form>
+    </div>
+{% endblock %}

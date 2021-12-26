@@ -1,0 +1,33 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+    <div class="features">
+        {% if user.is_authenticated %}
+        <h1>Здравствуйте, {{user.first_name}} {{user.last_name}}</h1>
+         <div>
+            {% for group in request.user.groups.all %}
+        <p>Ваша роль в системе: {{group.name}}</p>
+
+        {% endfor %}
+         </div>
+        <hr>
+        <a href="{% url 'unit' %}" class="btn btn-dark" style="">Открыть таблицу с Единицами измерения</a>
+
+        <a href="{% url 'place' %}" class="btn btn-dark">Открыть таблицу с Местами склада</a>
+
+
+        {% else %}
+        <div class="alert alert-primary" role="alert">
+         Вы не вошли в систему, ваши права ограничены.<br>
+            Пожалуйста,<a href="{% url 'login' %}" class="alert-link"> авторизуйтесь. </a>
+        </div>{% endif %}
+        <p>{{act}}</p>
+
+
+
+    </div>
+{% endblock %}
+
+

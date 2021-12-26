@@ -1,0 +1,70 @@
+{% extends 'main/layout.html' %}
+{% block title %} Клиенты {% endblock %}
+{% block content %}
+    <div class="features">
+    <h1>Информация о клиентах
+        <a href="{% url 'add_client' %}"> <button type="button" class="btn btn-info">Добавить клиента</button></a>
+       </h1>
+        <div>
+            <form action="{% url 'clients' %}" method="GET" class="form-inline my-2 my-lg-0">
+           {% csrf_token %}
+          <input type="search" class="form-control mr-sm-2" placeholder="Поиск по названию фирмы" name="search" style="width: 400px;">
+          <button type="Submit" class="btn btn-info my-2 my-sm-0" name = "Submit" value="Submit" >Искать</button>
+          <button type="Submit" class="btn btn-info my-2 my-sm-0" name = "Cancel" value="Reset" style="margin-left:10px;">Отменить</button>
+            </form>
+         </div>
+
+          <p style="padding: 10px;">{{message}}</p>
+        <table class="table table-bordered">
+   <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Название фирмы</th>
+      <th scope="col">ИНН</th>
+      <th scope="col">Телефон</th>
+      <th scope="col">Адрес</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% if clients %}
+   {% for el in clients %}
+
+        {% if key %}
+
+            {% for k in key %}
+
+                    {% if el.id == k %}
+    <tr>
+      <th scope="row">{{el.id}}</th>
+      <td>{{el.client_name}}</td>
+      <td>{{el.inn}}</td>
+      <td>{{el.phone}}</td>
+      <td>{{el.address}}</td>
+     <td><a href="{% url 'update_client' el.id %}"> <button class="btn btn-outline-success"><i class="fas fa-pencil-alt"></i></button></a></td>
+      <td><a href="{% url 'delete_client' el.id %}"><button type="submit" class="btn btn-outline-danger"><i class="fas fa-trash-alt"></i></button></a></td>
+    </tr>
+
+                {% endif %}
+
+            {% endfor %}
+
+        {% else %}
+
+        <tr>
+      <th scope="row">{{el.id}}</th>
+      <td>{{el.client_name}}</td>
+      <td>{{el.inn}}</td>
+      <td>{{el.phone}}</td>
+      <td>{{el.address}}</td>
+     <td><a href="{% url 'update_client' el.id %}"> <button class="btn btn-outline-success"><i class="fas fa-pencil-alt"></i></button></a></td>
+      <td><a href="{% url 'delete_client' el.id %}"><button type="submit" class="btn btn-outline-danger"><i class="fas fa-trash-alt"></i></button></a></td>
+    </tr>
+        {% endif %}
+   {% endfor %}
+  {% else %}
+        <p>У вас нет клиентов</p>
+  {% endif %}
+  </tbody>
+</table>
+    </div>
+{% endblock %}

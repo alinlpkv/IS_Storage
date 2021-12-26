@@ -1,0 +1,21 @@
+{% extends 'main/layout.html' %}
+
+{% block title %} Новый клиент{% endblock %}
+{% block content %}
+    <div class="features">
+        {% if title %}
+    <h1> {{title}} </h1>
+        {% else %}
+    <h1> Форма редактирования </h1>
+         {% endif %}
+        <form method="post">
+            {% csrf_token %}
+            {{form.client_name}}<br>
+            {{form.inn}}<br>
+            {{form.phone}}<br>
+            {{form.address}}<br>
+            <button type="submit" class="btn btn-info">Сохранить</button>
+        </form>
+            <span>{{error}}</span>
+    </div>
+{% endblock %}

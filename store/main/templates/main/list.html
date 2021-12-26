@@ -1,0 +1,63 @@
+{% extends 'main/layout.html' %}
+{% block title %} Заказы {% endblock %}
+{% block content %}
+    <div class="features">
+        <h1>Бланки заказов</h1>
+         {% for group in request.user.groups.all %}
+            {% if group.name != 'Заведующий складом' and  group.name != 'Cотрудник' %}
+        <!-- Upload form. Note enctype attribute! -->
+        <form action="{% url 'my-view' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+<!--            {{ message }}-->
+           <div class="form-group" style="width:60%">
+               <label>ФИО клиента</label>
+
+               {{ form.client }}
+           </div>
+            <p>{{ form.non_field_errors }}</p>
+            <p>{{ form.docfile.label_tag }} {{ form.docfile.help_text }}</p>
+            <p>
+                {{ form.docfile.errors }}
+                {{ form.docfile }}
+            </p>
+            <br>
+            <p><input type="submit" value="Загрузить"/></p>
+        </form>
+          {% endif %}
+            {% endfor %}
+        <br>
+        {% if documents %}
+            <ul class="list-group" style="width: 80%; ">
+                {% for document in documents %}
+                <div class="container">
+                <div class="row" style="margin-bottom:10px">
+                    <div class="col">
+                <li class="list-group-item d-flex justify-content-between align-items-center"  >
+                     <a href="{{ document.docfile.url }}">{{ document.docfile.name }}</a>
+                    {% if document.status == "Новый" %}
+                    <span class="badge badge-danger badge-pill"> {{document.status}} </span>
+                    {% elif document.status == "Начат" %}
+                    <span class="badge badge-warning badge-pill"> {{document.status}} </span>
+                    {% elif document.status == "Закончен" %}
+                    <span class="badge badge-success badge-pill"> {{document.status}} </span>
+                    {% endif %}
+                 </li>
+                    </div>
+                    {% for group in request.user.groups.all %}
+                         {% if group.name == 'Заведующий складом' or  group.name == 'Cотрудник' or group.name == 'Администратор сайта' %}
+                     <div class="col">
+                    <form action="{% url 'my-view-status' document.id %}" method="get" style="margin-top:5px">
+                        <input type="submit" class="btn btn-outline-primary" value="Дальше" name="next">
+                    </form>
+                     </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                </div>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Документов не найдено.</p>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+<div class="features">
+  <h1>Документы на складе</h1>
+<br>
+<div class="row">
+  <div class="col-sm-5">
+    <div class="card bg-light">
+      <div class="card-body">
+        <h5 class="card-title">Акт приема-передачи товара</h5>
+              {% for group in request.user.groups.all %}
+            {% if group.name != 'Менеджер по продажам' and  group.name != 'Cотрудник'%}
+        <p class="card-text" style="padding-bottom: 5px;">Для создания документа: </p>
+        <div style="width: 80%;">
+         <form action="" method="POST" >
+           {% csrf_token %}
+          <input type="text" class="form-control" placeholder="Номер акта" name="numact" required style="margin-bottom: 10px" value="{{numact}}">
+          <input type="text" class="form-control" placeholder="Введите количество позиций" name="cols" required value="{{cols}}">
+          <button type="Submit" class="btn btn-primary" name = "Submit" value="Submit" style="margin-top: 20px; float: left;">Применить</button>
+      </form>
+         <a href="{% url 'act_sale' %}" class="btn btn-primary" style="float: left; margin-left: 10px; ">Создать</a>
+        </div>
+                {% endif %}
+            {% endfor %}
+      </div>
+        <div class="card-footer bg-transparent border-info" style="height: 60px;">
+          <a href="{% url 'open_act' %}" class="btn btn-outline-primary">Открыть Акты</a>
+        </div>
+    </div>
+  </div>
+   {% for group in request.user.groups.all %}
+          {% if group.name == 'Заведующий складом' or group.name == 'Администратор сайта' %}
+ <div class="col-sm-5">
+    <div class="card bg-light">
+      <div class="card-body">
+        <h5 class="card-title">Инвентаризационные описи</h5>
+        <p class="card-text" style="padding-bottom: 5px;">Для создания документа: </p>
+        <div style="width: 80%;">
+          <form action="" method="POST" name="form_opis">
+           {% csrf_token %}
+              <input type="number" class="form-control" placeholder="Номер описи" name="numopis" required style="margin-bottom:10px" value="{{numopis}}">
+              <input type="text" class="form-control" placeholder="Введите количество позиций" name="cols_opis" required value="{{cols_opis}}">
+
+          <button type="Submit" class="btn btn-primary" name = "Submit" value="Submit" style="margin-top: 20px; float: left;">Применить</button>
+        </form>
+         <a href="{% url 'opis' %}" class="btn btn-primary" style="float: left; margin-left: 10px; ">Создать</a>
+        </div>
+      </div>
+        <div class="card-footer bg-transparent border-info" style="height: 60px;">
+          <a href="{% url 'open_opis' %}" class="btn btn-outline-primary">Открыть Описи</a>
+        </div>
+    </div>
+  </div>
+          {% elif group.name == 'Cотрудник' %}
+     <div class="col-sm-5">
+    <div class="card bg-light">
+      <div class="card-body">
+        <h5 class="card-title">Инвентаризационные описи</h5>
+      </div>
+        <div class="card-footer bg-transparent border-info" style="height: 60px;">
+          <a href="{% url 'open_opis' %}" class="btn btn-outline-primary">Открыть Описи</a>
+        </div>
+    </div>
+  </div>
+        {% endif %}
+            {% endfor %}
+</div>
+    </div>
+{% endblock %}
+
+

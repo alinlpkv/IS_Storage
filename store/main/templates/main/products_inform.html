@@ -1,0 +1,101 @@
+{% extends 'main/layout.html' %}
+{% block title %} Товары {% endblock %}
+{% block content %}
+    <div class="features">
+    <h1>Товары на складе
+          {% for group in request.user.groups.all %}
+          {% if group.name != 'Менеджер по продажам' %}
+        <a href="{% url 'add_product' %}"> <button type="button" class="btn btn-info">Добавить новый товар</button></a>
+        {% endif %}
+        {% endfor %}
+       </h1>
+        <div>
+            <form action="{% url 'products' %}" method="GET" class="form-inline my-2 my-lg-0">
+           {% csrf_token %}
+          <input type="search" class="form-control mr-sm-2" placeholder="Поиск по наименованию" name="search" style="width: 400px;">
+          <button type="Submit" class="btn btn-info my-2 my-sm-0" name = "Submit" value="Submit" >Искать</button>
+          <button type="Submit" class="btn btn-info my-2 my-sm-0" name = "Cancel" value="Reset" style="margin-left:10px;">Отменить</button>
+            </form>
+         </div>
+
+        <p style="padding: 10px;">{{message}}</p>
+        <table class="table table-bordered">
+   <thead>
+    <tr>
+      <th scope="col">Код</th>
+      <th scope="col">Наименование</th>
+      <th scope="col">Кол-во</th>
+      <th scope="col">Ед. измерения</th>
+      <th scope="col">Цена за ед.</th>
+      <th scope="col">Место хранения</th>
+      <th scope="col">Годен до</th>
+      <th scope="col">Поставщик</th>
+      <th scope="col">Описание</th>
+      <th scope="col">Сертификат</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% if products %}
+    {% for el in products %}
+
+        {% if key %}
+
+            {% for k in key %}
+
+                    {% if el.id == k %}
+    <tr>
+      <th scope="row">{{el.id}}</th>
+      <td>{{el.product_name}}</td>
+      <td>{{el.amount}}</td>
+      <td>{{el.unit}}</td>
+      <td>{{el.price_for_one}}</td>
+      <td>{{el.place_for_store}}</td>
+      <td>{{el.valid}}</td>
+      <td>{{el.provider}}</td>
+      <td>{{el.description}}</td>
+      <td>{{el.certificate}}</td>
+           {% for group in request.user.groups.all %}
+          {% if group.name != 'Менеджер по продажам' %}
+     <td><a href="{% url 'update_product' el.id %}"> <button class="btn btn-outline-success"><i class="fas fa-pencil-alt"></i></button></a></td>
+      <td><a href="{% url 'delete_product' el.id %}"><button type="submit" class="btn btn-outline-danger"><i class="fas fa-trash-alt"></i></button></a></td>
+         {% endif %}
+        {% endfor %}
+    </tr>
+                {% endif %}
+
+            {% endfor %}
+
+        {% else %}
+
+   <tr>
+      <th scope="row">{{el.id}}</th>
+      <td>{{el.product_name}}</td>
+      <td>{{el.amount}}</td>
+      <td>{{el.unit}}</td>
+      <td>{{el.price_for_one}}</td>
+      <td>{{el.place_for_store}}</td>
+      <td>{{el.valid}}</td>
+      <td>{{el.provider}}</td>
+      <td>{{el.description}}</td>
+      <td>{{el.certificate}}</td>
+           {% for group in request.user.groups.all %}
+          {% if group.name != 'Менеджер по продажам' %}
+     <td><a href="{% url 'update_product' el.id %}"> <button class="btn btn-outline-success"><i class="fas fa-pencil-alt"></i></button></a></td>
+      <td><a href="{% url 'delete_product' el.id %}"><button type="submit" class="btn btn-outline-danger"><i class="fas fa-trash-alt"></i></button></a></td>
+         {% endif %}
+        {% endfor %}
+    </tr>
+
+
+        {% endif %}
+
+
+   {% endfor %}
+  {% else %}
+        <p>У вас нет товаров на складе</p>
+ {% endif %}
+  </tbody>
+</table>
+    </div>
+
+{% endblock %}
