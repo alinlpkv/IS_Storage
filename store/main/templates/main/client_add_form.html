@@ -10,12 +10,18 @@
          {% endif %}
         <form method="post">
             {% csrf_token %}
-            {{form.client_name}}<br>
-            {{form.inn}}<br>
-            {{form.phone}}<br>
-            {{form.address}}<br>
+            <label>Наименование фирмы клиента</label>
+            {{form.client_name}}
+            <label>ИНН</label>
+            {{form.inn}}
+            <label>Номер телефона</label>
+            {{form.phone}}
+            <label>Адрес</label>
+            {{form.address}}
             <button type="submit" class="btn btn-info">Сохранить</button>
         </form>
             <span>{{error}}</span>
+          <span>{{form.inn.errors}}</span>
+          <span>{{form.phone.errors}}</span>
     </div>
 {% endblock %}

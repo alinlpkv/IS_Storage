@@ -7,7 +7,7 @@ from datetime import datetime
 class Provider(models.Model):
     provider_name = models.CharField('Название фирмы', max_length=255)
     inn = models.BigIntegerField('ИНН')
-    phone = models.CharField('Телефон', max_length=12)
+    phone = models.CharField('Телефон', max_length=20)
     address = models.CharField('Адрес', max_length=255)
 
     def __str__(self):
@@ -37,7 +37,7 @@ class Client(models.Model):
         verbose_name = 'Клиент'
         verbose_name_plural = 'Клиенты'
 
-
+# таблица ед измерения
 class Unit(models.Model):
     unit = models.CharField('Единица измерения', max_length=20, primary_key=True)
 
@@ -49,8 +49,9 @@ class Unit(models.Model):
         verbose_name = 'Единица измерения'
         verbose_name_plural = 'Единицы измерения'
 
+# таблица  места хранения
 class Place(models.Model):
-    place_for_store = models.CharField('Место хранения', max_length=50, blank=True, primary_key=True)
+    place_for_store = models.CharField('Место хранения', max_length=50, primary_key=True)
 
     def __str__(self):
         return self.place_for_store
@@ -73,7 +74,7 @@ class Product(models.Model):
     valid = models.CharField('Годен до', max_length=10, blank=True)
     provider = models.ForeignKey(Provider, on_delete=models.PROTECT)
     description = models.CharField('Описание', max_length=255, default=' - ', blank=True)
-    certificate = models.PositiveSmallIntegerField('№ сертификата')
+    certificate = models.CharField('№ сертификата',  max_length=30)
 
     def __str__(self):
         return self.product_name
@@ -87,17 +88,25 @@ class Product(models.Model):
 
 # Таблица для хранения номера Акта
 class NumAct(models.Model):
-    numact = models.PositiveSmallIntegerField('')
+    numact = models.PositiveSmallIntegerField('', unique=True)
 
     def __str__(self):
         return str(self.numact)
 
+    class Meta:
+        verbose_name = 'Номер акта'
+        verbose_name_plural = 'Номера актов'
+
 # Таблица для хранения номера Описи
 class NumOpis(models.Model):
-    numopis = models.PositiveSmallIntegerField('')
+    numopis = models.PositiveSmallIntegerField('', unique= True)
 
     def __str__(self):
         return str(self.numopis)
+
+    class Meta:
+        verbose_name = 'Номер описи'
+        verbose_name_plural = 'Номера описей'
 
 # Таблица для заполнения акта
 class ProductsInAct(models.Model):
@@ -105,11 +114,27 @@ class ProductsInAct(models.Model):
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
     amount = models.PositiveSmallIntegerField('Количество')
 
+    def __str__(self):
+        return ("№" + str(self.numact))
+
+    class Meta:
+        verbose_name = 'Продукты в акте'
+        verbose_name_plural = 'Продукты в актах'
+
 # Таблица для заполнения описи
 class ProductsInOPis(models.Model):
     numopis = models.ForeignKey(NumOpis,  on_delete=models.PROTECT)
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
     amount = models.PositiveSmallIntegerField('Фактическое количество')
+
+    def __str__(self):
+        return ("№" + str(self.numopis))
+
+    class Meta:
+        verbose_name = 'Продукты в описи'
+        verbose_name_plural = 'Продукты в описях'
+
+
 
 
 #Таблица бланков заказов
@@ -146,6 +171,9 @@ class Opis(models.Model):
     # user = models.ForeignKey(User, on_delete=models.PROTECT)
     numopis = models.ForeignKey(NumOpis, on_delete=models.PROTECT)
 
+    def __str__(self):
+        return str(self.docfile.name)
+
     class Meta:
         verbose_name = 'Опись'
         verbose_name_plural = 'Описи'
@@ -157,6 +185,9 @@ class ActDoc(models.Model):
     client = models.ForeignKey(Client, on_delete=models.PROTECT)
     # user = models.ForeignKey(User, on_delete=models.PROTECT)
     numact = models.ForeignKey(NumAct, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return str(self.docfile.name)
 
     class Meta:
         verbose_name = 'Акт приема-передачи'

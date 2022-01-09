@@ -29,21 +29,21 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='NumAct',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('numact', models.PositiveSmallIntegerField(verbose_name='')),
+                ('id', models.BigAutoField(auto_created=True,  primary_key=True, serialize=False, verbose_name='ID')),
+                ('numact', models.PositiveSmallIntegerField(unique=True, verbose_name='')),
             ],
         ),
         migrations.CreateModel(
             name='NumOpis',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('numopis', models.PositiveSmallIntegerField(verbose_name='')),
+                ('numopis', models.PositiveSmallIntegerField(unique=True,  verbose_name='')),
             ],
         ),
         migrations.CreateModel(
             name='Place',
             fields=[
-                ('place_for_store', models.CharField(blank=True, max_length=50, primary_key=True, serialize=False, verbose_name='Место хранения')),
+                ('place_for_store', models.CharField(max_length=50, primary_key=True, serialize=False, verbose_name='Место хранения')),
             ],
             options={
                 'verbose_name': 'Место хранения',
@@ -59,7 +59,7 @@ class Migration(migrations.Migration):
                 ('price_for_one', models.DecimalField(decimal_places=2, max_digits=6, verbose_name='Цена за единицу')),
                 ('valid', models.CharField(blank=True, max_length=10, verbose_name='Годен до')),
                 ('description', models.CharField(blank=True, default=' - ', max_length=255, verbose_name='Описание')),
-                ('certificate', models.PositiveSmallIntegerField(verbose_name='№ сертификата')),
+                ('certificate', models.CharField(verbose_name='№ сертификата', max_length=30)),
                 ('place_for_store', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='main.place')),
             ],
             options={
@@ -73,7 +73,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('provider_name', models.CharField(max_length=255, verbose_name='Название фирмы')),
                 ('inn', models.BigIntegerField(verbose_name='ИНН')),
-                ('phone', models.CharField(max_length=12, verbose_name='Телефон')),
+                ('phone', models.CharField(max_length=20, verbose_name='Телефон')),
                 ('address', models.CharField(max_length=255, verbose_name='Адрес')),
             ],
             options={

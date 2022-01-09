@@ -46,7 +46,11 @@
     <tr>
       <th scope="row">{{el.id}}</th>
       <td>{{el.product_name}}</td>
-      <td>{{el.amount}}</td>
+        {% if el.amount == 0 %}
+      <td bgcolor="#D3EDF6" align="center">{{el.amount}}</td>
+        {% else %}
+        <td>{{el.amount}}</td>
+        {% endif %}
       <td>{{el.unit}}</td>
       <td>{{el.price_for_one}}</td>
       <td>{{el.place_for_store}}</td>
@@ -70,7 +74,11 @@
    <tr>
       <th scope="row">{{el.id}}</th>
       <td>{{el.product_name}}</td>
-      <td>{{el.amount}}</td>
+       {% if el.amount == 0 %}
+      <td bgcolor="#DC143C">{{el.amount}}</td>
+       {% else %}
+       <td>{{el.amount}}</td>
+       {% endif %}
       <td>{{el.unit}}</td>
       <td>{{el.price_for_one}}</td>
       <td>{{el.place_for_store}}</td>

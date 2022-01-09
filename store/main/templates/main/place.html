@@ -16,9 +16,6 @@
    {% for el in place %}
     <tr>
       <td>{{el.place_for_store}}</td>
-<!--        <td><a href=""> <button class="btn btn-outline-success"><i class="fas fa-pencil-alt"></i></button></a></td>-->
-      <td><a href="{% url 'delete_place' el.place_for_store %}"><button type="submit" class="btn btn-outline-danger"><i class="fas fa-trash-alt"></i></button></a></td>
-
     </tr>
    {% endfor %}
   {% else %}

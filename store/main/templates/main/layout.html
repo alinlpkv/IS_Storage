@@ -41,11 +41,11 @@
             <hr>
             <a href="{% url 'admin:index' %}"><li><i class="fas fa-crown"></i> Панель администратора</li></a>
             {% endif %}
-            <form method="POST">
-            {% csrf_token %}>
-                <input type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" class="form-control" id="act_num" name="datemask" value="{{datemask}}">
-<!--            {{maskform.datemask}}-->
-            <button type="submit"></button></form>
+<!--            <form method="POST">-->
+<!--            {% csrf_token %}>-->
+<!--                <input type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" class="form-control" id="act_num" name="datemask" value="{{datemask}}">-->
+<!--&lt;!&ndash;            {{maskform.datemask}}&ndash;&gt;-->
+<!--            <button type="submit"></button></form>-->
         </ul>
     </aside>
     <main>

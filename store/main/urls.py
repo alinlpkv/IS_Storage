@@ -12,9 +12,7 @@ urlpatterns = [
     path('unit/add_unit', views.add_unit_func, name='add_unit'),
 
     path('place', views.place_func, name='place'),
-    path('place/add_unit', views.add_place_func, name='add_place'),
-    # path('place/update_place/<pk>', views.PlaceUpdatelView.as_view(), name='update_place'),
-    path('place/delete_place/<path>', views.delete_place_func, name='delete_place'),
+    path('place/add_place', views.add_place_func, name='add_place'),
 
     path('providers', views.providers_func, name='providers'),
     path('providers/add_new_provider', views.add_provider_func, name='add_provider'),
@@ -40,6 +38,7 @@ urlpatterns = [
 
     path('blanks', views.my_view, name='my-view'),
     path('blanks/<id>', views.my_view_status, name='my-view-status'),
+    path('blank/delete_blank/<id>', views.delete_blank_func, name='delete_blank'),
     path('<path>', views.download_docx, name='download'),
 
 ]

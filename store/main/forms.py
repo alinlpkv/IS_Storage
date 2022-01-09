@@ -1,19 +1,18 @@
 from django.core.exceptions import ValidationError
-from django.core.validators import FileExtensionValidator
-
+from django.core.validators import FileExtensionValidator, MaxValueValidator, MinValueValidator, RegexValidator
 from .models import *
 from django.forms import ModelForm, TextInput, DateInput, Select, NumberInput
 from django import forms
 
-
+# Тип для заполнения даты
 class DateInput(forms.DateInput):
     input_type = 'date'
 
-
+# Форма поставщика
 class ProviderForm(ModelForm):
     class Meta:
         model = Provider
-        fields = ['provider_name', 'inn', 'phone', 'address']
+        fields = ['provider_name', 'inn', 'address', 'phone']
 
         widgets = {
             'provider_name': TextInput(attrs={
@@ -26,7 +25,7 @@ class ProviderForm(ModelForm):
              }),
             'phone': TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Номер телефона'
+                'placeholder': '+71234567890'
             }),
             'address': TextInput(attrs={
                 'class': 'form-control',
@@ -34,11 +33,20 @@ class ProviderForm(ModelForm):
             })
             }
 
+    def __init__(self, *args, **kwargs):
+        super(ProviderForm, self).__init__(*args, **kwargs)
+        self.fields['inn'].validators = [MinValueValidator(10**9), MaxValueValidator(10 ** 12)]
+        validate_phone = RegexValidator(regex=r'^((\+7|7|8)+([0-9]){10})$',
+                                           message='Неправильно введен номер телефона.',
+                                           code='invalid_format')
+        self.fields['phone'].validators = [validate_phone]
 
+# Форма клиента
 class ClientForm(ModelForm):
+
     class Meta:
         model = Client
-        fields = ['client_name', 'inn', 'phone', 'address']
+        fields = ['client_name', 'phone', 'address', 'inn']
 
         widgets = {
             'client_name': TextInput(attrs={
@@ -51,7 +59,7 @@ class ClientForm(ModelForm):
              }),
             'phone': forms.TextInput(attrs={
                 'class': 'form-control',
-                'data-mask': "000-000-0000"
+                'placeholder': '+71234567890'
             }),
             'address': TextInput(attrs={
                 'class': 'form-control',
@@ -59,7 +67,15 @@ class ClientForm(ModelForm):
             })
             }
 
+    def __init__(self, *args, **kwargs):
+        super(ClientForm, self).__init__(*args, **kwargs)
+        self.fields['inn'].validators = [MinValueValidator(10**9), MaxValueValidator(10**12)]
+        validate_phone = RegexValidator(regex=r'^((\+7|7|8)+([0-9]){10})$',
+                                        message='Неправильно введен номер телефона.',
+                                        code='invalid_format')
+        self.fields['phone'].validators = [validate_phone]
 
+# Форма ед измерения
 class UnitForm(ModelForm):
     class Meta:
         model = Unit
@@ -71,7 +87,7 @@ class UnitForm(ModelForm):
                 'placeholder': 'Новая единица измерения'
             }),
         }
-
+# Форма для места хранения
 class PlaceForm(ModelForm):
     class Meta:
         model = Place
@@ -83,13 +99,12 @@ class PlaceForm(ModelForm):
                 'placeholder': 'Место хранения'
             }),
         }
-
+# Форма продуктов
 class ProductForm(ModelForm):
-    valid = forms.DateField(widget=DateInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = Product
-        fields = '__all__'
+        fields = ['product_name', 'amount', 'unit', 'price_for_one', 'place_for_store', 'provider', 'description', 'certificate', 'valid']
 
         widgets = {
             'product_name': TextInput(attrs={
@@ -98,7 +113,7 @@ class ProductForm(ModelForm):
             }),
             'amount': TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Количество'
+                'placeholder': '0'
              }),
             'unit': Select(attrs={
                 'class': 'form-control',
@@ -106,38 +121,37 @@ class ProductForm(ModelForm):
             }),
             'price_for_one': TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Цена за единицу'
+                'placeholder': '00.0'
             }),
             'place_for_store': Select(attrs={
                 'class': 'form-control',
                 'placeholder': 'Место хранения'
             }),
-            # 'valid': TextInput(attrs={
-            #      'data-mask':"000-000-0000",
-            #     'class': 'form-control',
-            # }),
             'provider': Select(attrs={
                 'class': 'form-control',
                 'placeholder': 'Поставщик товара'
             }),
             'description': TextInput(attrs={
                 'class': 'form-control',
-
                 'placeholder': 'Описание товара'
             }),
             'certificate': TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': '№ сертификата'
             }),
+            'valid': DateInput(attrs={
+                'class': 'form-control',
 
+            }),
             }
 
-
+# проверка размера ФАЙЛА
 def file_size(value): # add this to some file where you can import it from
     limit = 500*1024
     if value.size > limit:
         raise ValidationError('Файл слишком большой. Максимальный размер файла 500Кб.')
 
+# Форма для загрузки бланка заказа
 class BlankForm(ModelForm):
     docfile = forms.FileField(label='Работа с файлом:', validators=[file_size, FileExtensionValidator(['docx', 'doc'])])
     # date = forms.CharField(max_length=20, initial=str(datetime.today().strftime('%d.%m.%Y')))
@@ -151,12 +165,9 @@ class BlankForm(ModelForm):
                 'class': 'form-control',
                 'placeholder': 'Название документа'
             }),
-            # 'status': Select(attrs={
-            #     'class': 'form-control'
-            # }),
         }
 
-
+# Форма номера акта
 class NumActForm(ModelForm):
     cols = forms.CharField(max_length=2)
 
@@ -167,12 +178,11 @@ class NumActForm(ModelForm):
             'numact': TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Номер акта',
-
             }),
 
         }
 
-
+# Форма номера описи
 class NumOpisForm(ModelForm):
     cols_opis = forms.CharField(max_length=3)
 
@@ -183,10 +193,10 @@ class NumOpisForm(ModelForm):
             'numopis': TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Номер описи',
-
             }),
         }
 
+# Форма загрузки акта
 class ActOpenForm(ModelForm):
     arr = NumAct.objects.all()
     n = len(arr)
@@ -218,18 +228,10 @@ class ActOpenForm(ModelForm):
                 'class': 'form-control',
                 'placeholder': 'Клиент'
             }),
-            # 'user': Select(attrs={
-            #     'class': 'form-control',
-            #
-            # }),
-            # 'numact': NumberInput(attrs={
-            #     'class': 'form-control',
-            #     'placeholder': 'Номер акта'
-            # }),
         }
 
 
-
+# Форма заполнения акта
 class ActForm(forms.Form):
         # act_num = forms.CharField(max_length=10, widget=forms.NumberInput(attrs={"class": "form-control", 'valid': 'None'}))
         act_date = forms.CharField(max_length=50, widget=forms.TextInput(attrs={"class": "form-control"}))
@@ -240,7 +242,7 @@ class ActForm(forms.Form):
         doc_name = forms.CharField(max_length=70, widget=forms.TextInput(attrs={"class": "form-control"}))
 
 
-
+# Форма заполнения описи
 class OpisForm(forms.Form):
         podrazdel = forms.CharField(max_length=50, widget=forms.TextInput(attrs={"class": "form-control", 'placeholder': 'Структурное подразделение' }))
         okud = forms.CharField(max_length=10, widget=forms.TextInput(attrs={"class": "form-control", 'placeholder': 'Код ОКУД'}))
@@ -256,7 +258,7 @@ class OpisForm(forms.Form):
         v_product = forms.CharField(max_length=100, widget=forms.TextInput(attrs={"class": "form-control", 'placeholder': 'Вид товарной ценности'}))
 
 
-
+# Форма продукта в акте
 class ProductsInActForm(ModelForm):
     class Meta:
         model = ProductsInAct
@@ -274,7 +276,7 @@ class ProductsInActForm(ModelForm):
 
         }
 
-
+# Форма продукта в описи
 class ProductsInOpisForm(ModelForm):
     class Meta:
         model = ProductsInOPis
@@ -292,27 +294,7 @@ class ProductsInOpisForm(ModelForm):
 
         }
 
-
-# class ProductAddForm(forms.Form):
-#     arr = Product.objects.all()
-#     n = len(arr)
-#     list_pr = []
-#     inside = [0, 1]
-#
-#     for i in range(n):
-#         list_pr.append(i)
-#         inside[0] = arr[i].product_name
-#         inside[1] = arr[i]
-#         f = tuple(inside.copy())
-#         list_pr[i] = f
-#
-#     list_pr.insert(0,['1', ' '])
-#     CHOICES = tuple(list_pr)
-#     # print(CHOICES)
-#
-#     product = forms.ChoiceField(widget=forms.Select(attrs={'class': 'form-control'}), choices=CHOICES)
-#     amount = forms.CharField(max_length=4,  widget=forms.TextInput(attrs={"class": "form-control"}))
-
+# Форма добавления клиента в акт
 class ClientCompanyAddForm(forms.Form):
     arr = Client.objects.all()
     n=len(arr)
@@ -329,17 +311,6 @@ class ClientCompanyAddForm(forms.Form):
     list_c.insert(0,['1', ' '])
     CHOICES = tuple(list_c)
 
-
     client = forms.ChoiceField(widget=forms.Select(attrs={'class': 'form-control'}), choices=CHOICES)
 
 
-# class PhoneNumber(forms.PhoneNumber):
-#     input_type = 'phone'
-
-
-
-# class MyCustomInput(InputMask):
-#    mask = {'cpf': '0 (000) 00-00'}
-
-# class MaskForm(forms.Form):
-#     datemask =MyCustomInput()

@@ -17,7 +17,8 @@
         <div style="width: 80%;">
          <form action="" method="POST" >
            {% csrf_token %}
-          <input type="text" class="form-control" placeholder="Номер акта" name="numact" required style="margin-bottom: 10px" value="{{numact}}">
+            <input type="text" class="form-control" placeholder="Номер акта" name="numact" required style="margin-bottom: 10px" value="{{numact}}">
+            <p>{{form.numact.errors}}</p>
           <input type="text" class="form-control" placeholder="Введите количество позиций" name="cols" required value="{{cols}}">
           <button type="Submit" class="btn btn-primary" name = "Submit" value="Submit" style="margin-top: 20px; float: left;">Применить</button>
       </form>
@@ -42,6 +43,7 @@
           <form action="" method="POST" name="form_opis">
            {% csrf_token %}
               <input type="number" class="form-control" placeholder="Номер описи" name="numopis" required style="margin-bottom:10px" value="{{numopis}}">
+                  <p style="float: right">{{form_opis.numopis.errors}}</p>
               <input type="text" class="form-control" placeholder="Введите количество позиций" name="cols_opis" required value="{{cols_opis}}">
 
           <button type="Submit" class="btn btn-primary" name = "Submit" value="Submit" style="margin-top: 20px; float: left;">Применить</button>

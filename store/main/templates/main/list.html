@@ -30,10 +30,15 @@
             <ul class="list-group" style="width: 80%; ">
                 {% for document in documents %}
                 <div class="container">
+
                 <div class="row" style="margin-bottom:10px">
+<!--                   <div style="margin-top:5px">-->
+<!--                       <a href="{% url 'delete_blank' document.id %}"><button type="submit" class="btn btn-outline-danger"><i class="fas fa-trash-alt"></i></button></a></div>-->
                     <div class="col">
                 <li class="list-group-item d-flex justify-content-between align-items-center"  >
-                     <a href="{{ document.docfile.url }}">{{ document.docfile.name }}</a>
+                     <a href="{{ document.docfile.url }}">{{ document.docfile.name }}
+                         <br>
+                    <small class="mb-1" style="color:black"> {{document.client}} </small></a>
                     {% if document.status == "Новый" %}
                     <span class="badge badge-danger badge-pill"> {{document.status}} </span>
                     {% elif document.status == "Начат" %}

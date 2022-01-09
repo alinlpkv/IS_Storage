@@ -11,4 +11,5 @@ admin.site.register(NumAct)
 admin.site.register(NumOpis)
 admin.site.register(Unit)
 admin.site.register(Place)
-
+admin.site.register(ProductsInOPis)
+admin.site.register(ProductsInAct)

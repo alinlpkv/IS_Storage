@@ -15,6 +15,16 @@
          </div>
 
         <p style="padding: 10px;">{{message}}</p>
+
+        {% if error_delete %}
+        <p style="padding: 10px;">{{error_delete}}</p>
+        <ul>
+        {% for el in arr %}
+            <li>{{el}}</li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+
         <table class="table table-bordered">
    <thead>
     <tr>
